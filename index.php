@@ -106,7 +106,7 @@
       <form class="form-inline pull-xs-right ">
 <!--         <input class="form-control mr-sm-2 " type="email" placeholder="Email" aria-label="Email">
         <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password">
--->        <a class="btn btn-primary" href="#">Dashboard</a>
+-->        <a class="btn btn-primary" href="/admin">Dashboard</a>
       </form>
     </nav>
 
@@ -329,8 +329,7 @@ Event list
         <div>
           <div class="event">
           Balaton Sound</div>
-          <div class="rating"><input  type="checkbox" checked data-toggle="toggle" data-style="ios" data-on="On" data-off="Off"></div>
-
+          <div class="rating"><input class="iosToggle" type="checkbox" checked data-toggle="toggle" data-style="ios" data-on="On" data-off="Off"></div>
 
         </div>
         <div class="location">

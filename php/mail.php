@@ -28,7 +28,7 @@ if ($_POST) {
 
       $emailTo ="info@festbot.com";
       $subject ="Enterprise Application";
-      $content ="Visitors ".$_POST['visitors']."<br>"."Event number ".$_POST['eventNumber']."<br>"."Kind Of ".$_POST['kindOf']."<br>"."Notes: ".$_POST['notes']."<br>";
+      $content ="Visitors ".$_POST['visitors']."\n"."Event number ".$_POST['eventNumber']."\n"."Kind Of ".$_POST['kindOf']."\n"."Notes: ".$_POST['notes']."\n";
       $headers = "From: ".$_POST["email"];
 
       if (mail($emailTo, $subject, $content, $headers )) {
