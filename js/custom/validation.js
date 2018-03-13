@@ -1,8 +1,8 @@
 
 /*
-a validalando form beallitasai
+az email validalando form beallitasai
 
-class="myFormValidation";
+containerhez class="myFormValidation";
 email input class="email"
 submit input id="submit" class="btn-primary"
 <div className="errorMessage"></div> a hibauzenetre
@@ -14,6 +14,7 @@ $(".myFormValidation").submit(function(e) {
 
     e.preventDefault();
     var $error="";
+    
 
 // ures email mezo
     if ($(this).find(".email").val() == "") {
@@ -29,8 +30,10 @@ $(".myFormValidation").submit(function(e) {
        //alert($(this).find(".errorMessage").val());
         $(this).find(".errorMessage").html('<div class="alert alert-danger" role="alert"> <strong>There was an error: </strong>' + $error + '</div>');
 
+        setTimeout(function (){
+            $(".errorMessage").empty();
             return false;
-
+        }, 2000);
 
       } else {
 
@@ -38,6 +41,8 @@ $(".myFormValidation").submit(function(e) {
             $(this).find(".errorMessage").html('<div class="alert alert-success" role="alert"> <strong>Your application has been submitted, thank you!</strong></div>');
             $(".btn-primary").hide();
             setTimeout(function (){
+
+              $(".errorMessage").empty();
               $(".myFormValidation").unbind("submit").submit();
               return true;
             }, 2000);

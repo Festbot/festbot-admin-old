@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
-
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <title>Festbot</title>
 
     <!-- Bootstrap core CSS -->
@@ -106,7 +106,7 @@
       <form class="form-inline pull-xs-right ">
 <!--         <input class="form-control mr-sm-2 " type="email" placeholder="Email" aria-label="Email">
         <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password">
--->        <a class="btn btn-primary" href="/admin">Dashboard</a>
+-->        <a class="btn btn-primary" href="/admin"><i class="fas fa-user"></i> Dashboard</a>
       </form>
     </nav>
 
@@ -142,7 +142,7 @@
       <div class="row mx-auto align-items-center"  style="width: 80%;">
       <div class="col-12 col-sm-8 col-md-7 col-lg-4  mx-auto mt-3 mb-3 pt-3 pb-3 ">
         <h1 class="text-primary">CREATE YOUR LINEUP<br><small class="text-muted"><em>A schedule tailored to your attendees interest.</em></small></h1>
-        <p>Your guests can completely personalize their schedule! Try this out: simply mark a concert or workshop with a star. Your smart chatbot will send you a friendly reminder when the session is about to start so you’ll never miss it! Using AI Data Analysis we can collect performers/events for your attendees, based on their musical taste or on other preferences and add them to their hand!</p>
+        <p>Your guests can completely personalize their schedule! Try this out: simply mark an event with a star. Your smart chatbot will send you a friendly reminder when the session is about to start so you’ll never miss it! Using AI Data Analysis we can collect performers/events for your attendees, based on theirnavi preferences and add them to their hand!</p>
       </div>
       <div  class="col-12 col-sm-8 col-md-7 col-lg-4 mx-auto mt-3 mb-3 pt-3 pb-3 ">
         <img src="festbot-agenda-list-50p.png" class="col-12 col-sm-12 rounded" alt="">
@@ -223,7 +223,9 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">Announcements<span class="badge badge-primary badge-pill">Unlimited</span></li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">Additional days<span class="badge badge-primary badge-pill">&euro; 190/day</span></li>
             </ul>
+
             </div>
+            <p class="text-muted"><em>Suits for workshop, meet-up, small conference</em></p>
             <div class="card-footer">
             <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
           </div>
@@ -246,6 +248,7 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">API integration</li>
             </ul>
             </div>
+            <p class="text-muted"><em>Suits for exhibition, meet-up, conference</em></p>
             <div class="card-footer">
             <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
           </div>
