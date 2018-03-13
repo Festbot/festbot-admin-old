@@ -504,15 +504,15 @@ Event list
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div id="errorEnterprise" ></div>
+
 
       <div class="modal-body">
 
-          <form method="post" class="enterprise">
-
+          <form method="post" class="enterprise myFormValidation">
+            <div class="errorMessage" ></div>
             <div class="form-group">
               <label for="exampleFormControlInput1">Email address</label>
-              <input type="email" class="form-control" name="email" id="emailEnterprise" placeholder="name@example.com">
+              <input type="email" class="form-control email" name="email" id="emailEnterprise" placeholder="name@example.com">
             </div>
             <div class="form-group">
               <label for="exampleFormControlSelect1">Visitors expected?</label>
@@ -549,7 +549,7 @@ Event list
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Apply</button>
+              <button type="submit"  class="btn btn-primary">Apply</button>
             </div>
           </form>
       </div>
