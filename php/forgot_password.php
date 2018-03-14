@@ -4,40 +4,19 @@
     #echo md5(md5($row['id'])."password");
 #   /n new line
 
-/*
-$id= $row['id'];
-$token= $row['salt'];
-$organisation= $row['first_name'];
-$email = $_POST['email'];
-*/
-
 
 require "../php/config.php";
-#require "../php/mysql.php";
-$successMessage ='';
+require "../php/mysql.php";
+$succesMessage ='';
 $error='';
 
-#$id = $_GET["id"];
-#$email = $_GET["email"];
-#$token = $_GET["token"];
-#$organisation = $_GET["name"];
-$activation_link = "http://festbot.com/php/activation.php?id=".$id."&token=".$token."&email=".$email;
+$id = $_GET["id"];
+$email = $_GET["email"];
+$token = $_GET["token"];
+$activation_link = "http://festbot.com/php/new_activation.php?id='.$id.'&token='.$salt.'&email='.$email";
 #header('Location: /php/new_activation.php?id='.$id.'&token='.$salt.'&email='.$email);
-#var_dump($activation_link);
 
-$emailTo = $_POST['email'];
-$subject ="Festbot partner account activation";
-$content ="Dear Partner \n\nPlease follow the provided link to activate your account:\n".$activation_link."\n\n Best Regards,\n\nFestbot team";
-$headers = "info@festbot.com";
 
-if (mail($emailTo, $subject, $content, $headers )) {
-  #header('Location: /admin/index.php);
-
-  $successMessage = '<div class="alert alert-success" role="alert"> <strong>Your activation link has been sent to your email, thank you!<br></strong></div>';
-
-} else {
-    $error = '<div class="alert alert-danger" role="alert"> <strong>Your activation unsuccessful, please trey again later. <br></strong></div>';
-}
 
 
 
@@ -171,13 +150,29 @@ form em{
 
   <div class="container mx-auto vertical-center">
     <div class="container loginDiv col-md-8">
-      <h1 class="display-3"></h1>
+      <h1 class="display-3">Secure Password</h1>
       <div class="errorMessage">
-
+        <?php echo $error.$succesMessage ?>
       </div>
-      <?php echo $error.$successMessage ?>
-        <div class="errorMessage"></div>
 
+      <form method="post" class="myPasswordConfirmation">
+        <div class="errorMessage"></div>
+        <div class="form-group">
+          <label for="Email"></label>
+          <input type="email" name="email" class="form-control email" id="email" aria-describedby="emailHelp" placeholder="<?php echo $email;?>" disabled>
+
+        </div>
+        <div class="form-group">
+          <label for="Password"></label>
+          <input type="password" name="password1" class="form-control password" id="newPassword1" placeholder="Enter your password">
+        </div>
+        <div class="form-group">
+          <label for="Password" for="inputSuccess"></label>
+          <input type="password" name="password2" class="form-control password" id="newPassword2" placeholder="Re-enter your password" >
+        </div>
+        <br>
+        <button type="submit" id="submit" name="passwordConfirmation" class="btn btn-danger"><i class="fas fa-key"></i> Confirm</button>
+      </form>
     </div>
   </div>
 
@@ -205,16 +200,16 @@ form em{
     <script>
 
     //notification bar close on relodad
-    //  $(document).ready(function() {
-        //$(".alert").alert('close');
+      $(document).ready(function() {
+        $(".alert").alert('close');
       // show the alert
-      //setTimeout(function() {
+      setTimeout(function() {
 
-      //    $(".errorMessage").empty();
+          $(".errorMessage").empty();
 
-      //}, 4000);
+      }, 4000);
 
-      //});
+      });
 
     </script>
 

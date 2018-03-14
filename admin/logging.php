@@ -1,10 +1,34 @@
 <?php
 
 session_start();
-require "../php/config.php";
-require "../php/mysql.php";
-echo $_SESSION['username'];
-echo $_SESSION['id'];
+
+if (array_key_exists('id', $_COOKIE)) { #ha keep me logged in
+
+  $_SESSION['id'] = $_COOKIE['id'];
+
+} #ha keep me logged in VEGE
+
+if (array_key_exists('id', $_SESSION)) {#be van jelentkezve
+
+  echo "Logged in!  <a href='../admin/index.php?logout=1'>Log out</a>";
+
+  /*
+
+  SECURE AREA!!
+
+  DashBOARD PHP code coming here
+
+  */
+
+} else {#be van jelentkezve ELSE
+
+  header ('Location: ../admin/index.php');
+
+} #be van jelentkezve ELSE END
+
+
+
+
 
 
 

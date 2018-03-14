@@ -1,28 +1,13 @@
 <?php
 
-session_start();
+
 require "../php/config.php";
     #$row['id']=73;
     #echo md5(md5($row['id'])."password");
 #   /n new line
-$successMessage='';
+$succesMessage='';
 
 $error="";
-
-if (array_key_exists('logout', $_GET)){ #loguot
-  
-  unset($_SESSION['id']);
-  setcookie("id", "", time() - 3600);
-  $_COOKIE['id']="";
-
-} else { #loguot ELSE
-  #logged in already
-  if (array_key_exists("id",$_SESSION) OR array_key_exists('id', $_COOKIE)){
-    header("Location: logging.php"); #redirected to the dashboard
-  }
-
-} #loguot ELSE END
-
 
 if ($_POST) {
 
@@ -41,6 +26,15 @@ if ($_POST) {
       $error .= "Password is required.<br>";
       }
 
+  if(isset($_POST['rememberMe'])){
+
+      setcookie('email', $_POST["email"]);
+      #var_dump($_COOKIE['email']);
+      #var_dump($_POST["email"]);
+  } else {
+
+      setcookie('email', $_POST["email"], time()-3600);
+  }
 
   if ($error !="") { #ha hiba van
 
@@ -50,7 +44,7 @@ if ($_POST) {
 
       require "../php/mysql.php";
       #var_dump($link);
-      $user=$_POST['email'];
+      $user=mysqli_real_escape_string($link, $_POST['email']);
       $password=$_POST["password"];
       #var_dump($email);
       ###  SIGN UP
@@ -77,7 +71,7 @@ if ($_POST) {
 
             } else { #nem sikeres signup else
               #aktivalo mail
-              $successMessage = '<div class="alert alert-success" role="alert"> <strong>Signup successful! You will receive the activation link by email shortly.<br></strong></div>';
+              $succesMessage = '<div class="alert alert-success" role="alert"> <strong>Signup successful! You will receive the activation link by email shortly.<br></strong></div>';
 
               $query = "SELECT id FROM `users` WHERE email='".mysqli_real_escape_string($link, $_POST['email'])."' LIMIT 1";
               $result = mysqli_query($link, $query);
@@ -87,7 +81,7 @@ if ($_POST) {
                 $row = mysqli_fetch_array($result);
                 $id= $row['id'];
                 $token = $six_digit_random_number;
-                $email = $_POST['email'];
+                $email = mysqli_real_escape_string($link, $_POST['email'];
                 require "../php/new_activation.php";
 
               } #mehet az aktivalo mail vege
@@ -100,7 +94,7 @@ if ($_POST) {
 
         if(isset($_POST['logIn'])){ # ha logIn van
 
-          $query = "SELECT secure_password,id,first_name,salt,password FROM `users` WHERE email='".mysqli_real_escape_string($link, $_POST['email'])."' LIMIT 1";
+          $query = "SELECT secure_password,id,first_name,salt FROM `users` WHERE email='".mysqli_real_escape_string($link, $_POST['email'])."' LIMIT 1";
           $result = mysqli_query($link, $query);
 
           if (mysqli_num_rows($result)>0) { #regisztralt felhasznalo
@@ -109,38 +103,16 @@ if ($_POST) {
 
             if ($row[0]=='yes') { #SECURE LOGIN HA AKTIVALT USER
               #var_dump($row);
-              #$successMessage = '<div class="alert alert-success" role="alert"> <strong>'.$row['secure_password'].$row['id'].'<br></strong></div>';
+              #$succesMessage = '<div class="alert alert-success" role="alert"> <strong>'.$row['secure_password'].$row['id'].'<br></strong></div>';
 
               $id= $row['id'];
 
-              $savedPassword=$row['password'];
-              $password = md5(md5($id.$_POST["password"]));
+              session_start();
+              $_SESSION['username']=$row['first_name'];
+              $_SESSION['id']=$row['id'];
 
-              if ($savedPassword != $password) { #jelszo nem megfelelo
-
-                $error = 'Incorrect password';
-                $error = '<div class="alert alert-danger" role="alert"> <strong>There was an error: <br></strong>' . $error . '</div>';
-
-              } else { #jelszo nem megfelelo ELSE
-
-                session_start();
-
-                $_SESSION['id']=$row['id'];
-
-                if(isset($_POST['rememberMe'])){
-
-                    setcookie('id', $id, time() + 3600*24);
-
-                } else {
-
-                    setcookie('id', $_POST["id"], time()-3600);
-                }
-                #echo $_SESSION['username'];
-                header("Location: logging.php");
-
-              } #jelszo nem megfelelo ELSE VEGE
-
-
+              #echo $_SESSION['username'];
+              header("Location: logging.php");
 
             }  else {#NINCS SECURE PASSWORD -AKTIVALO mail LINK
 
@@ -148,7 +120,7 @@ if ($_POST) {
               $id= $row['id'];
               $token= $row['salt'];
               $organisation= $row['first_name'];
-              $email = $_POST['email'];
+              $email = mysqli_real_escape_string($link, $_POST['email'];
               #send activation mail
               require "../php/new_activation.php";
 
@@ -183,7 +155,7 @@ if ($_POST) {
    #$result = mysqli_query($link, $query); #parancs megnyitas
 
     #  $email="info@sziget.com";
-   # $email= mysqli_real_escape_string($link, $email);  nem mukodik csak sql parancsban
+   # $email= mysqli_real_escape_string($link, $email);
 
    #$query = "SELECT * FROM users WHERE email='powkr@joajd.com'";
    #$query = "SELECT * FROM users WHERE email LIKE '%com%'";
@@ -283,7 +255,7 @@ body {color:yellow;}
   <div class="container mx-auto vertical-center">
     <div class="container loginDiv col-md-8">
       <h1 class="display-3">Festbot Login</h1>
-      <div><?php print_r($error.$successMessage); ?></div>
+      <div><?php print_r($error.$succesMessage); ?></div>
       <div class="errorMessage"></div>
 
       <form method="post" class="myLoginValidation">
@@ -298,8 +270,8 @@ body {color:yellow;}
           <input type="password" name="password" class="form-control password" id="exampleInputPassword1" placeholder="Password">
         </div>
         <div class="form-check">
-          <input type="checkbox" name="rememberMe" class="form-check-input rememberMe" id="exampleCheck1">
-          <label class="form-check-label" for="Check1">Keep me logged in</label>
+          <input type="checkbox" name="rememberMe" class="form-check-input rememberMe" id="exampleCheck1" checked>
+          <label class="form-check-label" for="Check1">Remember me</label>
         </div>
         <br>
         <button type="submit" id="signUp" name="signUp" class="btn btn-secondary">Sign up</button>
