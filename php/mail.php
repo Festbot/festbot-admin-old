@@ -6,7 +6,7 @@ if ($_POST) {
 
 
     if (!$_POST["email"]) {
-        $error .= "Email address is requiredPHP.<br>";
+        $error .= "Email address is required.<br>";
 
     }
 

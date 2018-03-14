@@ -1,35 +1,133 @@
 <?php
 
+
+require "../php/config.php";
     #$row['id']=73;
     #echo md5(md5($row['id'])."password");
-    if ($_POST) {
+#   /n new line
+$succesMessage='';
+
+$error="";
+
+if ($_POST) {
+
+  if (!$_POST["email"]) {
+
+      $error .= "Email address is required.<br>";
+      }
 
 
+  if ($_POST["email"] && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)== false) {
+      $error .= "Email address is invalid<br>";
 
-    if (!$_POST["email"]) {
-        $error .= "Email address is requiredphp.<br>";
+  }
+
+  if (!$_POST["password"]) {
+      $error .= "Password is required.<br>";
+      }
+
+  if(isset($_POST['rememberMe'])){
+
+      setcookie('email', $_POST["email"]);
+      #var_dump($_COOKIE['email']);
+      #var_dump($_POST["email"]);
+  } else {
+
+      setcookie('email', $_POST["email"], time()-3600);
+  }
+
+  if ($error !="") { #ha hiba van
+
+      $error = '<div class="alert alert-danger" role="alert"> <strong>There was an error: <br></strong>' . $error . '</div>';
+
+    } else { # ha minden jo
+
+      require "../php/mysql.php";
+      #var_dump($link);
+      $user=$_POST["email"];
+      $password=$_POST["password"];
+
+      ###  SIGN UP
+
+      if(isset($_POST['signUp'])){    #ha sing up ot nyomott
+
+          $query = "SELECT id FROM `users` WHERE email='".mysqli_real_escape_string($link, $_POST['email'])."' LIMIT 1";
+          $result = mysqli_query($link, $query);
+
+          if (mysqli_num_rows($result)>0) {
+            $error = ("The email address already taken!");
+            $error = '<div class="alert alert-danger" role="alert"> <strong>There was an error: <br></strong>' . $error . '</div>';
+
+          } else {
+
+            $six_digit_random_number = mt_rand(100000, 999999); #random a kodolashoz
+            $query = "INSERT INTO `users` (`email`,`password`,`salt`) VALUES ('".mysqli_real_escape_string($link, $_POST['email'])."','".mysqli_real_escape_string($link, $_POST['password'])."','".$six_digit_random_number."')";
+            #$query = "INSERT INTO `users` (`email`,`password`) VALUES ('proba@111.hu','jelszo')";
+            if (!mysqli_query($link,$query)) {
+
+              $error = "<p>Could not sign you up - Please try again later.</p>";
+              $error = '<div class="alert alert-danger" role="alert"> <strong>There was an error: <br></strong>' . $error . '</div>';
+
+            } else {
+
+              $succesMessage = '<div class="alert alert-success" role="alert"> <strong>Signup successful!<br></strong></div>';
+
+            }
+          }
         }
+
+        ### LOGIN
+
+        if(isset($_POST['logIn'])){ # ha logIn van
+
+          $query = "SELECT secure_password,id,first_name FROM `users` WHERE email='".mysqli_real_escape_string($link, $_POST['email'])."' LIMIT 1";
+          $result = mysqli_query($link, $query);
+
+          if (mysqli_num_rows($result)>0) { #regisztralt felhasznalo
+
+            $row = mysqli_fetch_array($result);
+
+            if ($row[0]=='yes') { #SECURE LOGIN
+              #var_dump($row);
+              #$succesMessage = '<div class="alert alert-success" role="alert"> <strong>'.$row['secure_password'].$row['id'].'<br></strong></div>';
+
+              $id= $row['id'];
+
+              session_start();
+              $_SESSION['username']=$row['first_name'];
+              $_SESSION['id']=$row['id'];
+
+              #echo $_SESSION['username'];
+              header("Location: logging.php");
+
+            }  else {#NEW PASSWORD KELL
+
+              $id= $row['id'];
+
+              #header("Location: new_activation.php?id=".$id."&email=".$email."&token=".$six_digit_random_number);
+              header('Location: /php/new_activation.php?id='.$id.'&email='.$user);
+
+
+            }
+
+          } else { #nem regisztralt felhasznalo
+
+            $error = ("Not a registered user, please sign up.");
+            $error = '<div class="alert alert-danger" role="alert"> <strong>There was an error: <br></strong>' . $error . '</div>';
+
+          }
+
+
+
+
+
+
+        }
+
+
+
     }
-
-    if ($_POST["email"] && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)== false) {
-        $error .= "Email address is invalid.php<br>";
-
-    }
-
-    if ($error !="") {
-
-        $error = '<div class="alert alert-danger" role="alert"> <strong>There was an error: <br></strong>' . $error . '</div>';
-
-    } else {
-
-        $emailTo ="info@festbot.com";
-        $subject ="Enterprise Application";
-        $content ="Visitors ".$_POST['visitors']."\n"."Event number ".$_POST['eventNumber']."\n"."Kind Of ".$_POST['kindOf']."\n"."Notes: ".$_POST['notes']."\n";
-        $headers = "From: ".$_POST["email"];
-
-
-    }
-
+}
 
 
 
@@ -41,7 +139,7 @@
 
    #$query ="UPDATE users SET password ='88888' WHERE email LIKE '%hotmail.com' LIMIT 1";
 
-   #$reasult = mysqli_query($link, $query); #parancs megnyitas
+   #$result = mysqli_query($link, $query); #parancs megnyitas
 
     #  $email="info@sziget.com";
    # $email= mysqli_real_escape_string($link, $email);
@@ -93,7 +191,7 @@
 
 body {
 
-    background: url('/pub/images/login.jpeg') center no-repeat fixed;
+    background: url('../pub/images/login.jpeg') center no-repeat fixed;
     text-align: center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -112,7 +210,7 @@ form em{
   font-size: 0.8rem;
 }
 
-
+body {color:yellow;}
 
 .loginDiv{
   // margin-top: 100px;
@@ -144,13 +242,14 @@ form em{
   <div class="container mx-auto vertical-center">
     <div class="container loginDiv col-md-8">
       <h1 class="display-3">Festbot Login</h1>
+      <div><?php print_r($error.$succesMessage); ?></div>
       <div class="errorMessage"></div>
 
       <form method="post" class="myLoginValidation">
         <div class="errorMessage"></div>
         <div class="form-group">
           <label for="Email"></label>
-          <input type="email" name="email" class="form-control email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+          <input type="email" name="email" class="form-control email" id="email" aria-describedby="emailHelp" placeholder="Email address" value="<?php if(isset($_COOKIE['email'])){ print_r($_COOKIE['email']);} ?>">
           <small id="emailHelp" class="form-text text-muted">Registered users, only.</small>
         </div>
         <div class="form-group">
@@ -158,11 +257,11 @@ form em{
           <input type="password" name="password" class="form-control password" id="exampleInputPassword1" placeholder="Password">
         </div>
         <div class="form-check">
-          <input type="checkbox" name="rememberMe" class="form-check-input" id="exampleCheck1">
+          <input type="checkbox" name="rememberMe" class="form-check-input rememberMe" id="exampleCheck1" checked>
           <label class="form-check-label" for="Check1">Remember me</label>
         </div>
         <br>
-        <button type="submit" name="signUp" class="btn btn-secondary">Sign up</button>
+        <button type="submit" id="signUp" name="signUp" class="btn btn-secondary">Sign up</button>
         <button type="submit" id="submit" name="logIn" class="btn btn-primary"><i class="fas fa-user"></i> Login</button>
       </form>
     </div>
@@ -189,7 +288,18 @@ form em{
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <script src="/js/custom/login_validation.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script>
 
+    //notification bar close on relodad
+      $(document).ready(function() {
+      // show the alert
+      setTimeout(function() {
+          $(".alert").alert('close');
+      }, 4000);
+
+      });
+
+    </script>
 
 </body>
 </html>

@@ -14,7 +14,7 @@ $(".myFormValidation").submit(function(e) {
 
     e.preventDefault();
     var $error="";
-    
+
 
 // ures email mezo
     if ($(this).find(".email").val() == "") {

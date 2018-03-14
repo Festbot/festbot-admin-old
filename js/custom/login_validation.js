@@ -42,6 +42,7 @@ $(".myLoginValidation").submit(function(e) {
 
         setTimeout(function (){
             $(".errorMessage").empty();
+            $(".alert").alert('close');
         }, 4000);
             return false;
 
@@ -53,7 +54,8 @@ $(".myLoginValidation").submit(function(e) {
 
             setTimeout(function (){
               $(".errorMessage").empty();
-              //$(".myLoginValidation").unbind("submit").submit();              
+              $(".alert").alert('close');
+              //$(".myLoginValidation").unbind("submit").submit();
             }, 2000);
               return true;
      }
