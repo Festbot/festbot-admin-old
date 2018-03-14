@@ -271,7 +271,7 @@
             </ul>
             </div>
             <div class="card-footer">
-            <button type="button" class="btn btn-lg btn-block btn-primary" data-toggle="modal" data-target="#contactUsModal">Contact us</button>
+            <button type="button" class="btn btn-lg btn-block btn-primary" data-toggle="modal" data-target="#contactUsModal">Signup</button>
           </div>
         </div><!--pricing-->
 

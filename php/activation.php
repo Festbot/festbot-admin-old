@@ -12,14 +12,16 @@ if (array_key_exists('id',$_GET)) {
   $token = $_GET['token'];
   $email = $_GET['email'];
 
-  $query = "SELECT password FROM `users` WHERE email='".mysqli_real_escape_string($link, $email)."' LIMIT 1";
+  #TODO vizsgalni kell tokent emailt
+
+  $query = "SELECT password,salt FROM `users` WHERE salt='".$token."' AND email='".mysqli_real_escape_string($link, $email)."' LIMIT 1";
   $result = mysqli_query($link, $query);
   $row = mysqli_fetch_array($result);
   $password = $row['password'];
 
   if (mysqli_num_rows($result)>0) {
 
-    $query = "UPDATE users SET password = '".md5(md5($id.$password))."', secure_password = 'yes' WHERE id =".$id." LIMIT 1";
+    $query = "UPDATE users SET password = '".md5(md5($id.$password."nyuszi"))."', secure_password = 'yes' WHERE id =".$id." LIMIT 1";
     $result = mysqli_query($link, $query);
 
     if (mysqli_query($link,$query)) {

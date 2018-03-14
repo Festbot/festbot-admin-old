@@ -10,7 +10,7 @@ $successMessage='';
 $error="";
 
 if (array_key_exists('logout', $_GET)){ #loguot
-  
+
   unset($_SESSION['id']);
   setcookie("id", "", time() - 3600);
   $_COOKIE['id']="";
@@ -66,9 +66,10 @@ if ($_POST) {
 
           } else {  #ha van mar ilyen user else
 
+
             $six_digit_random_number = mt_rand(100000, 999999); #random a kodolashoz
+            $six_digit_random_number = md5($six_digit_random_number);
             $query = "INSERT INTO `users` (`email`,`password`,`salt`) VALUES ('".mysqli_real_escape_string($link, $_POST['email'])."','".mysqli_real_escape_string($link, $_POST['password'])."','".$six_digit_random_number."')";
-            #$query = "INSERT INTO `users` (`email`,`password`) VALUES ('proba@111.hu','jelszo')";
 
             if (!mysqli_query($link,$query)) { #nem sikeres signup
 
@@ -100,6 +101,8 @@ if ($_POST) {
 
         if(isset($_POST['logIn'])){ # ha logIn van
 
+          #TODO getUserData($email) {}
+
           $query = "SELECT secure_password,id,first_name,salt,password FROM `users` WHERE email='".mysqli_real_escape_string($link, $_POST['email'])."' LIMIT 1";
           $result = mysqli_query($link, $query);
 
@@ -114,7 +117,7 @@ if ($_POST) {
               $id= $row['id'];
 
               $savedPassword=$row['password'];
-              $password = md5(md5($id.$_POST["password"]));
+              $password = md5(md5($id.$_POST["password"]."nyuszi"));
 
               if ($savedPassword != $password) { #jelszo nem megfelelo
 
@@ -290,7 +293,7 @@ body {color:yellow;}
         <div class="errorMessage"></div>
         <div class="form-group">
           <label for="Email"></label>
-          <input type="email" name="email" class="form-control email" id="email" aria-describedby="emailHelp" placeholder="Email address" value="<?php if(isset($_COOKIE['email'])){ print_r($_COOKIE['email']);} ?>">
+          <input type="email" name="email" class="form-control email" id="email" aria-describedby="emailHelp" placeholder="Email address" >
           <small id="emailHelp" class="form-text text-muted">Registered users, only.</small>
         </div>
         <div class="form-group">
