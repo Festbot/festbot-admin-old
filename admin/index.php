@@ -143,10 +143,7 @@ if ($_POST) {
 
               } #jelszo nem megfelelo ELSE VEGE
 
-
-
             }  else {#NINCS SECURE PASSWORD -AKTIVALO mail LINK
-
 
               $id= $row['id'];
               $token= $row['salt'];
@@ -154,9 +151,6 @@ if ($_POST) {
               $email = $_POST['email'];
               #send activation mail
               require "../php/new_activation.php";
-
-              #header("Location: new_activation.php?id=".$id."&email=".$email."&token=".$six_digit_random_number);
-
 
             } #aktivalt user vege 1 else ha nem aktivalt
           } else { #nem regisztralt felhasznalo
@@ -168,9 +162,8 @@ if ($_POST) {
 
         } # ha logIn van vege
 
-
-
     } #ha minden jo vege
+
 } #ha van post vege
 
 
